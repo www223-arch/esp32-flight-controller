@@ -5,10 +5,10 @@
 #include <cstdint>
 
 // ESP32默认引脚定义（可根据实际接线修改，也可通过构造函数传入自定义引脚）
-#define PS2_DEFAULT_DI_PIN     GPIO_NUM_34
-#define PS2_DEFAULT_DO_PIN     GPIO_NUM_35
-#define PS2_DEFAULT_CS_PIN     GPIO_NUM_36
-#define PS2_DEFAULT_CLK_PIN    GPIO_NUM_39
+#define PS2_DEFAULT_DI_PIN     GPIO_NUM_13
+#define PS2_DEFAULT_DO_PIN     GPIO_NUM_12
+#define PS2_DEFAULT_CS_PIN     GPIO_NUM_19
+#define PS2_DEFAULT_CLK_PIN    GPIO_NUM_5
 
 // 按键枚举（替代宏定义，提高类型安全性）
 enum class PS2Button : uint8_t {

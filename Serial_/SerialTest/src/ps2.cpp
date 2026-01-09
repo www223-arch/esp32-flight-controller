@@ -118,7 +118,7 @@ uint8_t PS2Controller::getPressedKey() {
     for (uint8_t i = 0; i < 9; i++) {
         data[i] = readData(scan[i]);
     }
-    setCsLevel(true);
+   // setCsLevel(true);
 
     // 组合按键数据（高8位+低8位）
     uint16_t handkey = (data[4] << 8) | data[3];
