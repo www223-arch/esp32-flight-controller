@@ -16,5 +16,5 @@
     "--query-driver=**",
     "--compile-commands-dir=d:\\ESP32\\Test_porject\\Fly_Idf\\idf_test\\esp_idf001\\build"
   ],
-  "idf.flashType": "JTAG"
+  "idf.flashType": "UART"
 }

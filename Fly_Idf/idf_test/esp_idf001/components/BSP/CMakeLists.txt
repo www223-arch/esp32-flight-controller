@@ -1,8 +1,8 @@
 set(src_dirs
-    led)
+    ledPwm)
 
 set(include_dirs
-    led)
+    ledPwm)
 
 set(requires
     driver)
