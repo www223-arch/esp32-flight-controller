@@ -1,6 +1,5 @@
 #include "ps2.h"
 
-
 //#include "stm32f10x.h"
 /*
 #define DO_H         GPIOA->BSRR = GPIO_Pin_9
@@ -39,15 +38,10 @@ uint16_t MASK[]={
     PSB_PINK
 	};	//按键值与按键明
 
-void delay_us(u32 n)
-{
-	u8 j;
-	while(n--)
-	for(j=0;j<10;j++);
-}
 
 void PS2_Init(void)
 {
+	    time_init();
 			    gpio_config_t cfg_in = {
         .pin_bit_mask = (1ULL << GPIO_NUM_8),
         .mode = GPIO_MODE_INPUT,
@@ -57,23 +51,11 @@ void PS2_Init(void)
 			gpio_config(&cfg_in);
 			    gpio_config_t cfg_out = {
         .pin_bit_mask = (1ULL << GPIO_NUM_9)|(1ULL << GPIO_NUM_10)|(1ULL << GPIO_NUM_11),
-        .mode = GPIO_MODE_INPUT,
+        .mode = GPIO_MODE_OUTPUT,
 		.intr_type=GPIO_INTR_DISABLE,
-	//	.pull_down_en=GPIO_PULLDOWN_ENABLE
     };
 			gpio_config(&cfg_out);
 
-	// //GPIO_PinRemapConfig(GPIO_Remap_USART1, DISABLE);
-	
-  	// GPIO_InitStructure.GPIO_Pin = GPIO_Pin_9 | GPIO_Pin_10 | GPIO_Pin_11;	 //DO  CS CLK
-  	// GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;      /*设置引脚模式为通用推挽输出*/
-  	// GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz; 
-  	// GPIO_Init(GPIOA, &GPIO_InitStructure);	
-
-	// GPIO_InitStructure.GPIO_Pin = GPIO_Pin_8;	//DI
-  	// GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IPD;     
-  	// GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz; 
-	// GPIO_Init(GPIOA, &GPIO_InitStructure);
 	DO_H;
 	CLC_H;
 	CS_H;
@@ -93,17 +75,17 @@ u8 PS2_ReadData(u8 command)
 		else
 			DO_L;
 		command = command >> 1;
-		delay_us(10);
+		mydelay_us(10);
 		CLC_L;
-		delay_us(10);
+		mydelay_us(10);
 		if(DI) 
 			res = res + j;
 		j = j << 1; 
 		CLC_H;
-		delay_us(10);	 
+		mydelay_us(10);	 
     }
     DO_H;
-	delay_us(50);
+	mydelay_us(50);
     return res;	
 }
 

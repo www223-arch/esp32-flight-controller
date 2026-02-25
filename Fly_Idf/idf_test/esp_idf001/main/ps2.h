@@ -1,11 +1,13 @@
 
 #ifndef __PS2_H__
 #define __PS2_H__
-
-
+#include "mytime.h"
 #include "driver/gpio.h"
 #include <stdio.h>
 #include <stdint.h>
+
+#include "soc/rtc.h"  // 获取APB时钟频率
+#include "esp_system.h"  // ESP-IDF 5.x 官方微秒延时函数
 
 typedef uint8_t u8;
 typedef uint16_t u16;
