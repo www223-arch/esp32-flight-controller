@@ -3,7 +3,9 @@
 
 #include <stdint.h>
 #include <stddef.h>
-
+#include <stdarg.h>
+#include <stdlib.h>
+#include <string.h>
 // #include "driver/uart.h"
 // #include <stdio.h>
 // void vofa_init();
@@ -47,5 +49,7 @@ void vofa_send_justfloat(float* data, uint8_t len);
  * @param len  数据长度
  */
 void vofa_send_rawdata(uint8_t* data, size_t len);
+
+void vofa_send_fmt(const char* fmt, ...) ;// 推荐使用，支持格式化字符串发送（如"%f,%f,%f"）
 
 #endif // __VOFA_H__

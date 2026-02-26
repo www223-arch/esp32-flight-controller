@@ -71,9 +71,15 @@ void app_main(void)
      vofa_init(&vofa_esp32_hal, VOFA_FORMAT_JUSTFLOAT, 115200);
     ESP_LOGI(TAG, "Start blinking LED strip");
      // 2. 循环发送测试数据
-    float test_data[3] = {25.5f, 60.2f, 12.3f}; // 温度、湿度、速度
+    float a = 1, b = 2, c = 3.3;
+        float test_data[3] = {a, b, c}; // 温度、湿度、速度
+        int test_data_int_int[3] = {4, 5, 6}; // 温度、湿度、速度
+
+
     while (1) {
-        vofa_send_justfloat(test_data, 3); // 发送JustFloat格式数据
-        vTaskDelay(pdMS_TO_TICKS(5));    // 100ms发送一次
+       // vofa_send_justfloat(test_data, 3); // 发送JustFloat格式数据
+        //vofa_send_justfloat((float*)test_data_int_int, 3); // 发送JustFloat格式数据
+        vofa_send_fmt("%d%d%f", test_data_int_int[0], test_data_int_int[1], test_data[2]); // 推荐使用，支持格式化字符串发送
+        vTaskDelay(pdMS_TO_TICKS(5));    
     }
 }
