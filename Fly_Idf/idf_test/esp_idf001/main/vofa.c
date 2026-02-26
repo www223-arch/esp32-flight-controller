@@ -1,0 +1,45 @@
+#include "vofa.h"
+//#include "driver/gpio.h"
+#include <string.h>
+// 全局变量：保存硬件抽象层句柄和协议格式
+static vofa_hal_handle_t* g_vofa_hal = NULL;
+static vofa_format_t     g_vofa_format = VOFA_FORMAT_JUSTFLOAT;
+
+// JustFloat格式结束符（VOFA协议要求）
+static const uint8_t vofa_justfloat_end[4] = {0x00, 0x00, 0x80, 0x7f};
+
+/**
+ * @brief VOFA模块初始化
+ */
+void vofa_init(vofa_hal_handle_t* hal_handle, vofa_format_t format, uint32_t baudrate) {
+    if (hal_handle == NULL || hal_handle->uart_init == NULL || hal_handle->uart_send == NULL) {
+        return; // 入参校验
+    }
+    g_vofa_hal = hal_handle;
+    g_vofa_format = format;
+    // 调用硬件层串口初始化函数
+    g_vofa_hal->uart_init(baudrate);
+}
+
+/**
+ * @brief 发送JustFloat格式数据（VOFA协议）
+ */
+void vofa_send_justfloat(float* data, uint8_t len) {
+    if (g_vofa_hal == NULL || g_vofa_hal->uart_send == NULL || data == NULL || len == 0 || len > 8) {
+        return; // 入参校验
+    }
+    // 1. 发送浮点数据
+    g_vofa_hal->uart_send((uint8_t*)data, len * sizeof(float));
+    // 2. 发送协议结束符
+    g_vofa_hal->uart_send(vofa_justfloat_end, 4);
+}
+
+/**
+ * @brief 发送RawData格式原始字节
+ */
+void vofa_send_rawdata(uint8_t* data, size_t len) {
+    if (g_vofa_hal == NULL || g_vofa_hal->uart_send == NULL || data == NULL || len == 0) {
+        return; // 入参校验
+    }
+    g_vofa_hal->uart_send(data, len);
+}

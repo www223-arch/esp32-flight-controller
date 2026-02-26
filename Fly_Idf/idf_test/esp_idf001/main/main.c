@@ -10,7 +10,9 @@
 #include "esp_log.h"
 #include "esp_err.h"
 #include "ps2.h"
-
+#include "vofa.h"
+#include "myuart.h"
+extern vofa_hal_handle_t vofa_esp32_hal;
 // Set to 1 to use DMA for driving the LED strip, 0 otherwise
 // Please note the RMT DMA feature is only available on chips e.g. ESP32-S3/P4
 #define LED_STRIP_USE_DMA 1
@@ -64,71 +66,14 @@ led_strip_handle_t configure_led(void)
 void app_main(void)
 {
 
-    led_strip_handle_t led_strip = configure_led();
+   // led_strip_handle_t led_strip = configure_led();
     PS2_Init();
+     vofa_init(&vofa_esp32_hal, VOFA_FORMAT_JUSTFLOAT, 115200);
     ESP_LOGI(TAG, "Start blinking LED strip");
-    while (1)
-    {
-         key = PS2_DataKey();
-			//获取模拟值
-			if(key == PSB_L1 || key == PSB_R1)
-			{
-				X1 = PS2_AnologData(PSS_LX);
-				Y1 = PS2_AnologData(PSS_LY);
-				X2 = PS2_AnologData(PSS_RX);
-				Y2 = PS2_AnologData(PSS_RY);
-            }
-              ESP_LOGI(TAG, "PS2 Key:  %d, X1: %d, Y1: %d, X2: %d, Y2: %d", key, X1, Y1, X2, Y2);
-                                        vTaskDelay(pdMS_TO_TICKS(1));
-                 /* Set the LED pixel using RGB from 0 (0%) to 255 (100%) for each color */
-            // for (int i = 0; i < LED_STRIP_LED_COUNT; i++) {
-            //     ESP_ERROR_CHECK(led_strip_set_pixel(led_strip, i, i, 0, 0));
-            // }
-            // for (int i = 0; i < 255; i++)
-            // {
-            //     ESP_ERROR_CHECK(led_strip_set_pixel(led_strip, 0, i, 0, 0));
-            //     ESP_ERROR_CHECK(led_strip_refresh(led_strip));
-
-            //     vTaskDelay(pdMS_TO_TICKS(5));
-            // }
-            // ESP_ERROR_CHECK(led_strip_refresh(led_strip));
-
-            // vTaskDelay(pdMS_TO_TICKS(1000));
-
-            // for (int i = 0; i < 255; i++)
-            // {
-            //     ESP_ERROR_CHECK(led_strip_set_pixel(led_strip, 0, 0, i, 0));
-            //     ESP_ERROR_CHECK(led_strip_refresh(led_strip));
-            //     vTaskDelay(pdMS_TO_TICKS(5));
-            // }
-            // ESP_ERROR_CHECK(led_strip_refresh(led_strip));
-
-         //  vTaskDelay(pdMS_TO_TICKS(1000));
-
-            // for (int i = 0; i < 255; i++)
-            // {
-            //     ESP_ERROR_CHECK(led_strip_set_pixel(led_strip, 0, 0, 0, i));
-            //     ESP_ERROR_CHECK(led_strip_refresh(led_strip));
-
-            //     vTaskDelay(pdMS_TO_TICKS(5));
-            // } 
-    //         CS_H;
-    //                         mydelay_us(22);
-
-    //         CS_L;
-    //    //             vTaskDelay(pdMS_TO_TICKS(5));
-
-
-    //             mydelay_us(4);
-    //                CS_H;
-    //                                    vTaskDelay(pdMS_TO_TICKS(1));
-    //                                              CS_L;
-    //    //             vTaskDelay(pdMS_TO_TICKS(5));
-
-
-    //             mydelay_us(30);
-
-
-
+     // 2. 循环发送测试数据
+    float test_data[3] = {25.5f, 60.2f, 12.3f}; // 温度、湿度、速度
+    while (1) {
+        vofa_send_justfloat(test_data, 3); // 发送JustFloat格式数据
+        vTaskDelay(pdMS_TO_TICKS(5));    // 100ms发送一次
     }
 }
