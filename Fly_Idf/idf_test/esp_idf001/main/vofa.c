@@ -57,6 +57,9 @@ void vofa_send_fmt(const char* fmt, ...) {
         p++;
     }
     if (var_count == 0) return;
+    if(var_count > VOFA_MAX_CHANNEL) {
+        var_count = VOFA_MAX_CHANNEL; // 超出最大通道数限制，截断处理
+    }
 
     // // 2. 分配内存存储转换后的float数据
     // float* float_data = (float*)malloc(var_count * sizeof(float));
