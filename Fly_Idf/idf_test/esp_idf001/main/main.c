@@ -20,7 +20,7 @@ u8 key = 0, X1=0,Y1=0,X2=0,Y2=0;
 void app_main(void)
 {
 
-   // led_strip_handle_t led_strip = configure_led();
+    led_strip_handle_t led_strip = configure_led();
     PS2_Init();
      vofa_init(&vofa_esp32_hal, VOFA_FORMAT_JUSTFLOAT, 115200);
     ESP_LOGI(TAG, "Start blinking LED strip");
