@@ -11,8 +11,11 @@
 #include "ps2.h"
 #include "mytime.h"
 #include "Rmt.h"
+#include "vofa.h"
+#include "myuart.h"
+
 static const char *TAG = "example";
-    u8 key = 0, X1=0,Y1=0,X2=0,Y2=0; 
+u8 key = 0, X1=0,Y1=0,X2=0,Y2=0; 
 
 void app_main(void)
 {
