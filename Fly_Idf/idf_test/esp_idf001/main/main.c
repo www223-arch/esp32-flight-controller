@@ -17,8 +17,9 @@ static const char *TAG = "example";
 void app_main(void)
 {
 
-    led_strip_handle_t led_strip = configure_led();
+   // led_strip_handle_t led_strip = configure_led();
     PS2_Init();
+     vofa_init(&vofa_esp32_hal, VOFA_FORMAT_JUSTFLOAT, 115200);
     ESP_LOGI(TAG, "Start blinking LED strip");
     while (1)
     {

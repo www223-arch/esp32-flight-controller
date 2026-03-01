@@ -76,3 +76,27 @@ Desktop.ini
 *.workspace # General workspace files, can be from various tools
 *.suo       # Visual Studio Solution User Options
 *.sln.docstates # Visual Studio
+
+
+# ESP-IDF通用忽略规则
+build/
+managed_components/
+.deps/
+.component-database/
+idf_component_manager.lock
+sdkconfig
+sdkconfig.old
+*.bin
+*.elf
+*.map
+*.o
+*.a
+*.cmake
+*.cache
+*.log
+.vs/
+.vscode/
+cmake-build-*/
+.DS_Store
+*.pyc
+__pycache__/
