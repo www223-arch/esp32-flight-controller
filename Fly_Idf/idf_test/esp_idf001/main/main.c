@@ -12,6 +12,7 @@
 #include "ps2.h"
 #include "vofa.h"
 #include "myuart.h"
+#include <math.h>
 extern vofa_hal_handle_t vofa_esp32_hal;
 // Set to 1 to use DMA for driving the LED strip, 0 otherwise
 // Please note the RMT DMA feature is only available on chips e.g. ESP32-S3/P4
@@ -74,12 +75,14 @@ void app_main(void)
     float a = 1, b = 2, c = 3.3;
         float test_data[3] = {a, b, c}; // 温度、湿度、速度
         int test_data_int_int[3] = {4, 5, 6}; // 温度、湿度、速度
-
+uint64_t t=0;
 
     while (1) {
+        t+=1;
        // vofa_send_justfloat(test_data, 3); // 发送JustFloat格式数据
         //vofa_send_justfloat((float*)test_data_int_int, 3); // 发送JustFloat格式数据
-        vofa_send_fmt("%d%d%f", test_data_int_int[0], test_data_int_int[1], test_data[2]); // 推荐使用，支持格式化字符串发送
-        vTaskDelay(pdMS_TO_TICKS(5));    
+        float single=5.144; // 生成一个变化的测试数据
+        vofa_send_fmt("%d%d%f", test_data_int_int[0], test_data_int_int[1],sin(t*3.14*2/1000)); // 推荐使用，支持格式化字符串发送
+        vTaskDelay(pdMS_TO_TICKS(1));    
     }
 }
