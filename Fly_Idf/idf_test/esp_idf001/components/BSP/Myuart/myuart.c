@@ -1,5 +1,10 @@
 #include "myuart.h"
 // Setup UART buffered IO with event queue
+// 构建ESP32平台的VOFA HAL句柄
+vofa_hal_handle_t vofa_esp32_hal = {
+    .uart_init = vofa_esp32_uart_init,
+    .uart_send = vofa_esp32_uart_send,
+};
 const int uart_buffer_size = (1024 * 2);
 QueueHandle_t uart_queue;
 // ESP32串口配置（可根据硬件修改）
@@ -40,8 +45,3 @@ static void vofa_esp32_uart_send(const uint8_t* data, size_t len) {
     uart_write_bytes(VOFA_UART_NUM, (const char*)data, len);
 }
 
-// 构建ESP32平台的VOFA HAL句柄
-vofa_hal_handle_t vofa_esp32_hal = {
-    .uart_init = vofa_esp32_uart_init,
-    .uart_send = vofa_esp32_uart_send,
-};

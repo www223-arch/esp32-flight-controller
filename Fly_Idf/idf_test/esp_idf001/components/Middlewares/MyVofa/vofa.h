@@ -6,9 +6,7 @@
 #include <stdarg.h>
 #include <stdlib.h>
 #include <string.h>
-// #include "driver/uart.h"
-// #include <stdio.h>
-// void vofa_init();
+
 /************************ 硬件抽象层（HAL）接口定义 ************************/
 // 串口初始化函数类型（由具体平台实现）
 typedef void (*vofa_uart_init_t)(uint32_t baudrate);

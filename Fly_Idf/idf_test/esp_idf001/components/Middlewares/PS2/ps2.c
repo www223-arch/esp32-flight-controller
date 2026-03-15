@@ -8,12 +8,7 @@
 #define CLC_L        GPIOA->BRR  = GPIO_Pin_11
 #define CS_H         GPIOA->BSRR = GPIO_Pin_10
 #define CS_L         GPIOA->BRR  = GPIO_Pin_10
-
-
 #define DI      GPIOA->IDR  & GPIO_Pin_8	 */
-
-
-
 uint16_t Handkey;
 uint8_t Comd[2]={0x01,0x42};	//开始命令。请求数据
 uint8_t scan[9]={0x01,0x42,0x00,0x00,0x00,0x00,0x00,0x00,0x00};//{0x01,0x42,0x00,0x5A,0x5A,0x5A,0x5A,0x5A,0x5A};	// 类型读取
