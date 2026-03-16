@@ -13,6 +13,27 @@
 #include "Rmt.h"
 #include "vofa.h"
 #include "myuart.h"
+#include <math.h>
+extern vofa_hal_handle_t vofa_esp32_hal;
+// Set to 1 to use DMA for driving the LED strip, 0 otherwise
+// Please note the RMT DMA feature is only available on chips e.g. ESP32-S3/P4
+#define LED_STRIP_USE_DMA 1
+
+#if LED_STRIP_USE_DMA
+// Numbers of the LED in the strip
+#define LED_STRIP_LED_COUNT 256
+#define LED_STRIP_MEMORY_BLOCK_WORDS 1024 // this determines the DMA block size
+#else
+// Numbers of the LED in the strip
+#define LED_STRIP_LED_COUNT 1
+#define LED_STRIP_MEMORY_BLOCK_WORDS 0 // let the driver choose a proper memory block size automatically
+#endif                                 // LED_STRIP_USE_DMA
+
+// GPIO assignment
+#define LED_STRIP_GPIO_PIN 48
+
+// 10MHz resolution, 1 tick = 0.1us (led strip needs a high resolution)
+#define LED_STRIP_RMT_RES_HZ (10 * 1000 * 1000)
 
 static const char *TAG = "example";
 u8 key = 0, X1=0,Y1=0,X2=0,Y2=0; 
@@ -24,19 +45,18 @@ void app_main(void)
     PS2_Init();
      vofa_init(&vofa_esp32_hal, VOFA_FORMAT_JUSTFLOAT, 115200);
     ESP_LOGI(TAG, "Start blinking LED strip");
-    while (1)
-    {
-         key = PS2_DataKey();
-			//获取模拟值
-			if(key == PSB_L1 || key == PSB_R1)
-			{
-				X1 = PS2_AnologData(PSS_LX);
-				Y1 = PS2_AnologData(PSS_LY);
-				X2 = PS2_AnologData(PSS_RX);
-				Y2 = PS2_AnologData(PSS_RY);
-            }
-              ESP_LOGI(TAG, "PS2 Key:  %d, X1: %d, Y1: %d, X2: %d, Y2: %d", key, X1, Y1, X2, Y2);
-                                        vTaskDelay(pdMS_TO_TICKS(1));
+     // 2. 循环发送测试数据
+    float a = 1, b = 2, c = 3.3;
+        float test_data[3] = {a, b, c}; // 温度、湿度、速度
+        int test_data_int_int[3] = {4, 5, 6}; // 温度、湿度、速度
+uint64_t t=0;
 
+    while (1) {
+        t+=1;
+       // vofa_send_justfloat(test_data, 3); // 发送JustFloat格式数据
+        //vofa_send_justfloat((float*)test_data_int_int, 3); // 发送JustFloat格式数据
+        float single=5.144; // 生成一个变化的测试数据
+        vofa_send_fmt("%d%d%f", test_data_int_int[0], test_data_int_int[1],sin(t*3.14*2/1000)); // 推荐使用，支持格式化字符串发送
+        vTaskDelay(pdMS_TO_TICKS(1));    
     }
 }
